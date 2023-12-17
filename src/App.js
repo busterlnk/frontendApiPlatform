@@ -1,9 +1,12 @@
 import './App.css';
 import {BrowserRouter as Router, Route, Routes} from "react-router-dom";
 import React from "react";
-import Home from './Components/Home';
-import Login from './Components/Login';
-import Register from './Components/Register';
+import Home from './Pages/Home';
+import Login from './Pages/Login';
+import Register from './Pages/Register';
+import Edit from './Pages/Edit';
+import Logout from './Pages/Logout';
+import axios from 'axios';
 
 function App() {
 
@@ -11,12 +14,16 @@ function App() {
     //   <h1>Not Found</h1>
     // );
 
+    // axios.defaults.withCredentials = true;
+ 
   return (
     <Router>
       <Routes>
-        <Route path="/home" element={<Home />}/>
+        <Route path="/" element={<Home />}/>
         <Route path="/Login" element={<Login />}/>
         <Route path="/register" element={<Register />}/>
+        <Route path="/edit/:id" element={<Edit />}/>
+        <Route path="/Logout" element={<Logout />}/>
         <Route render={() => <h1>Not Found</h1>} />
       </Routes>
     </Router>

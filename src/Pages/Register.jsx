@@ -1,13 +1,16 @@
 import React, { useState } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import axios from 'axios';
+import { useNavigate, Link } from 'react-router-dom';
 
 
 const CreateUserForm = () => {
+  const navigate = useNavigate();
+
   const [formData, setFormData] = useState({
-    vclogin: '',
-    vcemail: '',
-    vcpassword: ''
+    username: '',
+    email: '',
+    plainPassword: ''
   });
 
   const [confirmPassword, setConfirmPassword] = useState('');
@@ -17,9 +20,8 @@ const CreateUserForm = () => {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    console.log(name, value)
     
-    if(name != 'confirmPassword'){
+    if(name !== 'confirmPassword'){
       setFormData({
         ...formData,
         [name]: value,
@@ -32,10 +34,10 @@ const CreateUserForm = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     console.log(formData);
-    if (formData.vcpassword === confirmPassword) {
+    if (formData.plainPassword === confirmPassword) {
       console.log('Datos del usuario:', formData);
       const response = await axios.post(
-        'https://localhost/chatoperators',formData,
+        'https://localhost/users',formData,
         {
           headers: {
             'Content-Type': 'application/ld+json',
@@ -44,12 +46,13 @@ const CreateUserForm = () => {
       );
       console.log(response);
       setFormData({
-        vclogin: '',
-        vcemail: '',
-        vcpassword: ''
+        username: '',
+        email: '',
+        plainPassword: ''
       });
       setConfirmPassword('');
       setPasswordMatch(true);
+      navigate('/');
     } else {
       setPasswordMatch(false);
     }
@@ -57,49 +60,52 @@ const CreateUserForm = () => {
 
   return (
     <div className="container mt-5">
+        <button className="btn btn-primary">
+          <Link to="/" className="text-white text-decoration-none">Home</Link>
+        </button>
       <h2>Registro de Usuario</h2>
       <form onSubmit={handleSubmit}>
         
         <div className="mb-3">
-          <label htmlFor="vcemail" className="form-label">
+          <label htmlFor="email" className="form-label">
             Correo Electrónico:
           </label>
           <input
-            type="vcemail"
+            type="email"
             className="form-control"
-            id="vcemail"
-            name="vcemail"
-            value={formData.vcemail}
+            id="email"
+            name="email"
+            value={formData.email}
             onChange={handleChange}
             required
           />
         </div>
 
         <div className="mb-3">
-          <label htmlFor="vclogin" className="form-label">
+          <label htmlFor="username" className="form-label">
             Nombre:
           </label>
           <input
             type="text"
             className="form-control"
-            id="vclogin"
-            name="vclogin"
-            value={formData.vclogin}
+            id="username"
+            name="username"
+            value={formData.username}
             onChange={handleChange}
             required
           />
         </div>
 
         <div className="mb-3">
-          <label htmlFor="vcpassword" className="form-label">
+          <label htmlFor="plainPassword" className="form-label">
             Contraseña:
           </label>
           <input
             type="password"
             className="form-control"
-            id="vcpassword"
-            name="vcpassword"
-            value={formData.vcpassword}
+            id="plainPassword"
+            name="plainPassword"
+            value={formData.plainPassword}
             onChange={handleChange}
             required
           />
@@ -114,7 +120,7 @@ const CreateUserForm = () => {
             className={`form-control ${passwordMatch ? '' : 'is-invalid'}`}
             id="confirmPassword"
             name="confirmPassword"
-            value={formData.confirmPassword}
+            value={confirmPassword}
             onChange={handleChange}
             required
           />
