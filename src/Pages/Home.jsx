@@ -16,7 +16,8 @@ export default function Home() {
           'https://localhost/users',
           {
             headers: {
-              'Content-Type': 'application/ld+json',
+                Authorization: 'Bearer '+ localStorage.getItem('token'),
+                'Content-Type': 'application/ld+json'
             },
           }
         );
@@ -34,8 +35,28 @@ export default function Home() {
 
   // };
 
-  
-  const routeChange = (e) =>{ 
+    const handleLogout = (e) => {
+        e.preventDefault();
+        try {
+            // const response = axios.post(
+            //   'https://localhost/logout', null ,
+            //     {
+            //         headers: {
+            //             Authorization: 'Bearer '+ localStorage.getItem('token'),
+            //         },
+            //     }
+            // );
+            localStorage.removeItem('token');
+            navigate('/')
+            // const userIri = response.headers.get('Location');
+            // return response;
+
+
+        } catch (error) {
+            console.log(error.response.data);
+        }
+    }
+  const routeChange = (e) =>{
     navigate('/edit/'+e.target.value);
   }
 
@@ -48,6 +69,7 @@ export default function Home() {
         {
           headers: {
             'Content-Type': 'application/json',
+              // Authorization: 'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJpYXQiOjE3MDI5MDU2NzUsImV4cCI6MTcwMjkwOTI3NSwicm9sZXMiOlsiUk9MRV9VU0VSIl0sInVzZXJuYW1lIjoiYWxmYXJvIn0.VXM-sm0YZpxRPyVvUjhv4uABv_BQEauI3Zb5d2P9R-WvxsaSRG70a2TBiC5SjP9WPpkWt5TeILUDkNJyz4Eec8UCb_C0Kaip7l4ZK4qdxUy3AnMGjX2M5XSTMZUIaqTs0tHCeE4iVGlI10k8WxbhYNYjdbL1n5lWGn3k8JHiy4EO4WxzmCfaYdaw3l47ZDRPeEcO855ondLkbMuKwEgkVMM1A8n0Tl4Dlf4PqJ8Nx5r6S5T7eD2HLPcTvvqWtHLDX03Wm0Q4I0ZIb__QrsaXJP9GM9tP5l-ZX8aizUl9o-zLUDbliuTUTyIHSWa27hwS-3-mYb442HnZxXavHDseeQ',
           },
         }
       );
@@ -59,13 +81,20 @@ export default function Home() {
 
   return (
     <div className="container mt-5">
-        <button className="btn btn-primary">
-          <Link to="/register" className="text-white text-decoration-none">Sign Up</Link>
+        {!localStorage.getItem('token') ?
+        <div>
+            <button className="btn btn-primary">
+              <Link to="/register" className="text-white text-decoration-none">Sign Up</Link>
+            </button>
+            <button className="btn btn-primary mr-2">
+              <Link to="/login" className="text-white text-decoration-none">Login</Link>
+            </button>
+        </div>
+        :
+        <button type="submit" onClick={handleLogout} className="btn btn-primary">
+            Salir de la sesion
         </button>
-
-        <button className="btn btn-primary mr-2">
-          <Link to="/login" className="text-white text-decoration-none">Login</Link>
-        </button>
+        }
     <h1>Prueba Api Platform</h1>
     {/* Mostramos la información */}
     {responseData && responseData.length > 0 && (

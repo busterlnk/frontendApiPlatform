@@ -12,10 +12,11 @@ export const login = async (formData) => {
           }
         );
         // const userIri = response.headers.get('X-Location');
-        const userIri = response.headers.get('Link');
-        // console.log(response.data);
-        // return response.data.token;
-        return userIri;
+        // const userIri = response.headers.get('Link');
+        localStorage.setItem("token", response.data.token);
+        console.log(response.data);
+        return response.data.token;
+        // return userIri;
 
 
       } catch (error) {
@@ -33,15 +34,13 @@ export const fetchUser = async (authToken) => {
             {
             headers: {
                 'Content-Type': 'application/json',
-                // Authorization: `Bearer ${authToken}`
+                Authorization: `Bearer ${localStorage.getItem('token')}`
             },
           }
         );
 
         // const userIri = response.headers.get('Location');
         return response.data;
-
-
       } catch (error) {
         console.log(error.response.data);
       }
@@ -49,9 +48,12 @@ export const fetchUser = async (authToken) => {
 
 export const logout = () => {
     try{
-        const response = axios.post(
-            'https://localhost/logout', {}
-        )
+        // const response = axios.post(
+        //     'https://localhost/logout', null,{
+        //         Authorization: 'Bearer '+ localStorage.getItem('token')
+        //     }
+        // )
+
     }catch(error) {
         console.log(error.response.data);
     }

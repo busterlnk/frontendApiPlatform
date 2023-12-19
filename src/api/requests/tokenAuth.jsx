@@ -6,7 +6,7 @@ import jwt from "jsonwebtoken";
 export const decodeToken = (token) => {
     try {
         console.log(token);
-        const decodedToken = jwt.verify(token, 'your-secret-key'); // Reemplaza 'your-secret-key' con tu clave secreta
+        const decodedToken = jwt.verify(token, 'your-secret-key');
 
         return decodedToken;
     } catch (error) {

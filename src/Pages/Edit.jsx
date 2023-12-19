@@ -25,6 +25,7 @@ const EditUserForm = () => {
           {
             headers: {
               'Content-Type': 'application/json',
+                Authorization: `Bearer ${localStorage.getItem('token')}`
             },
           }
         );
@@ -59,10 +60,10 @@ const EditUserForm = () => {
     if (formData.plainPassword === confirmPassword) {
         console.log('Datos del usuario:', formData);
         const response = await axios.patch(
-        `https://localhost/users/${id}`,formData,
-        {
+        `https://localhost/users/${id}`,formData, {
             headers: {
             'Content-Type': 'application/merge-patch+json',
+            Authorization: `Bearer ${localStorage.getItem('token')}`
             },
         }
         );
@@ -88,7 +89,7 @@ const EditUserForm = () => {
         </button>
         <h2>Editar Usuario</h2>
         <form onSubmit={handleSubmit}>
-        
+
         <div className="mb-3">
             <label htmlFor="email" className="form-label">
             Correo Electrónico:
